@@ -1,0 +1,25 @@
+from langchain_groq import ChatGroq
+from dotenv import load_dotenv
+from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+load_dotenv()
+
+llm = ChatGroq(
+    model="llama-3.1-8b-instant"
+    )
+
+simple_prompt = PromptTemplate(
+    template='Your an expert support assistant, Please provide the 2 interesting facts about {topic} and provide these facts in a list. If you dont know about the given topic just say you dont know',
+    input_variables=['topic']
+)
+
+str_output_parse = StrOutputParser()
+
+simple_chain = simple_prompt | llm | str_output_parse
+
+query = input("Enter the topic : ")
+
+str_output = simple_chain.invoke({'topic': query})
+
+print(str_output)
